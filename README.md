@@ -1,6 +1,12 @@
 
 TopSnack
 ==============================================================
+#example
+
+
+TopSnackbar.make(v,"Hello",TopSnackbar.LENGTH_SHORT).show();
+
+
 #Specify TopSnack as a dependency in your build.gradle file:
 
 	allprojects {
