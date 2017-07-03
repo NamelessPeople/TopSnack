@@ -4,7 +4,7 @@ TopSnack
 #example
 
 
-	TopSnackbar.make(v,"Hello",TopSnackbar.LENGTH_SHORT).show();
+	
 	
 	
 #自定义布局
@@ -39,6 +39,9 @@ TopSnack
                                 Toast.makeText(MainActivity.this, "这是一张图片", Toast.LENGTH_SHORT).show();
                             }
                         }).show();
+			
+	TopSnackbar.make(v,"Hello",TopSnackbar.LENGTH_SHORT).show();
+	
 #Specify TopSnack as a dependency in your build.gradle file:
 
 	allprojects {
