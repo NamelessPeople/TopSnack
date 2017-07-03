@@ -26,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 
 import static android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP;
 

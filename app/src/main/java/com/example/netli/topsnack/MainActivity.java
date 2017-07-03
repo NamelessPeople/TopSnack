@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+
 import com.example.topsnackbar.TopSnackbar;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
