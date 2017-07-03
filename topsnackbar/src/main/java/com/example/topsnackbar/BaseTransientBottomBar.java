@@ -47,34 +47,46 @@ public abstract class BaseTransientBottomBar<B extends BaseTransientBottomBar<B>
      * @see BaseTransientBottomBar#addCallback(BaseCallback)
      */
     public abstract static class BaseCallback<B> {
-        /** Indicates that the Snackbar was dismissed via a swipe.*/
+        /**
+         * Indicates that the Snackbar was dismissed via a swipe.
+         */
         public static final int DISMISS_EVENT_SWIPE = 0;
-        /** Indicates that the Snackbar was dismissed via an action click.*/
+        /**
+         * Indicates that the Snackbar was dismissed via an action click.
+         */
         public static final int DISMISS_EVENT_ACTION = 1;
-        /** Indicates that the Snackbar was dismissed via a timeout.*/
+        /**
+         * Indicates that the Snackbar was dismissed via a timeout.
+         */
         public static final int DISMISS_EVENT_TIMEOUT = 2;
-        /** Indicates that the Snackbar was dismissed via a call to {@link #dismiss()}.*/
+        /**
+         * Indicates that the Snackbar was dismissed via a call to {@link #dismiss()}.
+         */
         public static final int DISMISS_EVENT_MANUAL = 3;
-        /** Indicates that the Snackbar was dismissed from a new Snackbar being shown.*/
+        /**
+         * Indicates that the Snackbar was dismissed from a new Snackbar being shown.
+         */
         public static final int DISMISS_EVENT_CONSECUTIVE = 4;
 
-        /** @hide */
+        /**
+         * @hide
+         */
         @RestrictTo(LIBRARY_GROUP)
         @IntDef({DISMISS_EVENT_SWIPE, DISMISS_EVENT_ACTION, DISMISS_EVENT_TIMEOUT,
                 DISMISS_EVENT_MANUAL, DISMISS_EVENT_CONSECUTIVE})
         @Retention(RetentionPolicy.SOURCE)
-        public @interface DismissEvent {}
+        public @interface DismissEvent {
+        }
 
         /**
          * Called when the given {@link BaseTransientBottomBar} has been dismissed, either
          * through a time-out, having been manually dismissed, or an action being clicked.
          *
          * @param transientBottomBar The transient bottom bar which has been dismissed.
-         * @param event The event which caused the dismissal. One of either:
-         *              {@link #DISMISS_EVENT_SWIPE}, {@link #DISMISS_EVENT_ACTION},
-         *              {@link #DISMISS_EVENT_TIMEOUT}, {@link #DISMISS_EVENT_MANUAL} or
-         *              {@link #DISMISS_EVENT_CONSECUTIVE}.
-         *
+         * @param event              The event which caused the dismissal. One of either:
+         *                           {@link #DISMISS_EVENT_SWIPE}, {@link #DISMISS_EVENT_ACTION},
+         *                           {@link #DISMISS_EVENT_TIMEOUT}, {@link #DISMISS_EVENT_MANUAL} or
+         *                           {@link #DISMISS_EVENT_CONSECUTIVE}.
          * @see BaseTransientBottomBar#dismiss()
          */
         public void onDismissed(B transientBottomBar, @DismissEvent int event) {
@@ -92,6 +104,8 @@ public abstract class BaseTransientBottomBar<B extends BaseTransientBottomBar<B>
         }
     }
 
+    public abstract boolean isTop();
+
     /**
      * Interface that defines the behavior of the main content of a transient bottom bar.
      */
@@ -99,7 +113,7 @@ public abstract class BaseTransientBottomBar<B extends BaseTransientBottomBar<B>
         /**
          * Animates the content of the transient bottom bar in.
          *
-         * @param delay Animation delay.
+         * @param delay    Animation delay.
          * @param duration Animation duration.
          */
         void animateContentIn(int delay, int duration);
@@ -107,7 +121,7 @@ public abstract class BaseTransientBottomBar<B extends BaseTransientBottomBar<B>
         /**
          * Animates the content of the transient bottom bar out.
          *
-         * @param delay Animation delay.
+         * @param delay    Animation delay.
          * @param duration Animation duration.
          */
         void animateContentOut(int delay, int duration);
@@ -120,7 +134,8 @@ public abstract class BaseTransientBottomBar<B extends BaseTransientBottomBar<B>
     @IntDef({LENGTH_INDEFINITE, LENGTH_SHORT, LENGTH_LONG})
     @IntRange(from = 1)
     @Retention(RetentionPolicy.SOURCE)
-    public @interface Duration {}
+    public @interface Duration {
+    }
 
     /**
      * Show the Snackbar indefinitely. This means that the Snackbar will be displayed from the time
@@ -192,14 +207,15 @@ public abstract class BaseTransientBottomBar<B extends BaseTransientBottomBar<B>
     @RestrictTo(LIBRARY_GROUP)
     interface OnAttachStateChangeListener {
         void onViewAttachedToWindow(View v);
+
         void onViewDetachedFromWindow(View v);
     }
 
     /**
      * Constructor for the transient bottom bar.
      *
-     * @param parent The parent for this transient bottom bar.
-     * @param content The content view for this transient bottom bar.
+     * @param parent              The parent for this transient bottom bar.
+     * @param content             The content view for this transient bottom bar.
      * @param contentViewCallback The content view callback for this transient bottom bar.
      */
     protected BaseTransientBottomBar(@NonNull ViewGroup parent, @NonNull View content,
@@ -422,7 +438,8 @@ public abstract class BaseTransientBottomBar<B extends BaseTransientBottomBar<B>
         mView.setOnAttachStateChangeListener(
                 new BaseTransientBottomBar.OnAttachStateChangeListener() {
                     @Override
-                    public void onViewAttachedToWindow(View v) {}
+                    public void onViewAttachedToWindow(View v) {
+                    }
 
                     @Override
                     public void onViewDetachedFromWindow(View v) {
@@ -470,87 +487,175 @@ public abstract class BaseTransientBottomBar<B extends BaseTransientBottomBar<B>
     }
 
     void animateViewIn() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            ViewCompat.setTranslationY(mView, -mView.getHeight());//原本在in ViewCompat.setTranslationY(mView, mView.getHeight());
-            ViewCompat.animate(mView)
-                    .translationY(0)
-                    //修改，原来         .translationY(0f)
-                    .setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR)
-                    .setDuration(ANIMATION_DURATION)
-                    .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationStart(View view) {
-                            mContentViewCallback.animateContentIn(
-                                    ANIMATION_DURATION - ANIMATION_FADE_DURATION,
-                                    ANIMATION_FADE_DURATION);
-                        }
+        if (isTop()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                ViewCompat.setTranslationY(mView, -mView.getHeight());//原本在in ViewCompat.setTranslationY(mView, mView.getHeight());
+                ViewCompat.animate(mView)
+                        .translationY(0)
+                        //修改，原来         .translationY(0f)
+                        .setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR)
+                        .setDuration(ANIMATION_DURATION)
+                        .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationStart(View view) {
+                                mContentViewCallback.animateContentIn(
+                                        ANIMATION_DURATION - ANIMATION_FADE_DURATION,
+                                        ANIMATION_FADE_DURATION);
+                            }
 
-                        @Override
-                        public void onAnimationEnd(View view) {
-                            onViewShown();
-                        }
-                    }).start();
+                            @Override
+                            public void onAnimationEnd(View view) {
+                                onViewShown();
+                            }
+                        }).start();
+            } else {
+                Animation anim = AnimationUtils.loadAnimation(mView.getContext(),
+                        R.anim.top_in);
+                //修改，以前的R.anim.design_snackbar_in
+                anim.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
+                anim.setDuration(ANIMATION_DURATION);
+                anim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        onViewShown();
+                    }
+
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
+                mView.startAnimation(anim);
+            }
         } else {
-            Animation anim = AnimationUtils.loadAnimation(mView.getContext(),
-                    R.anim.top_in);
-            //修改，以前的R.anim.design_snackbar_in
-            anim.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
-            anim.setDuration(ANIMATION_DURATION);
-            anim.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    onViewShown();
-                }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                ViewCompat.setTranslationY(mView, mView.getHeight());
+                ViewCompat.animate(mView)
+                        .translationY(0f)
+                        .setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR)
+                        .setDuration(ANIMATION_DURATION)
+                        .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationStart(View view) {
+                                mContentViewCallback.animateContentIn(
+                                        ANIMATION_DURATION - ANIMATION_FADE_DURATION,
+                                        ANIMATION_FADE_DURATION);
+                            }
 
-                @Override
-                public void onAnimationStart(Animation animation) {}
+                            @Override
+                            public void onAnimationEnd(View view) {
+                                onViewShown();
+                            }
+                        }).start();
+            } else {
+                Animation anim = AnimationUtils.loadAnimation(mView.getContext(),
+                        R.anim.design_snackbar_in);
+                anim.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
+                anim.setDuration(ANIMATION_DURATION);
+                anim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        onViewShown();
+                    }
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {}
-            });
-            mView.startAnimation(anim);
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
+                mView.startAnimation(anim);
+            }
         }
     }
 
     private void animateViewOut(final int event) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+        if (isTop()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 
-            ViewCompat.animate(mView)
-                    .translationY(-mView.getHeight())
-                    //修改，原来translationY(mView.getHeight())
-                    .setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR)
-                    .setDuration(ANIMATION_DURATION)
-                    .setListener(new ViewPropertyAnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationStart(View view) {
-                            mContentViewCallback.animateContentOut(0, ANIMATION_FADE_DURATION);
-                        }
+                ViewCompat.animate(mView)
+                        .translationY(-mView.getHeight())
+                        //修改，原来translationY(mView.getHeight())
+                        .setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR)
+                        .setDuration(ANIMATION_DURATION)
+                        .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationStart(View view) {
+                                mContentViewCallback.animateContentOut(0, ANIMATION_FADE_DURATION);
+                            }
 
-                        @Override
-                        public void onAnimationEnd(View view) {
-                            onViewHidden(event);
-                        }
-                    }).start();
+                            @Override
+                            public void onAnimationEnd(View view) {
+                                onViewHidden(event);
+                            }
+                        }).start();
+            } else {
+                Animation anim = AnimationUtils.loadAnimation(mView.getContext(),
+                        R.anim.top_out);
+                //修改，以前的R.anim.design_snackbar_out
+                anim.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
+                anim.setDuration(ANIMATION_DURATION);
+                anim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        onViewHidden(event);
+                    }
+
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
+                mView.startAnimation(anim);
+            }
         } else {
-            Animation anim = AnimationUtils.loadAnimation(mView.getContext(),
-                    R.anim.top_out);
-            //修改，以前的R.anim.design_snackbar_out
-            anim.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
-            anim.setDuration(ANIMATION_DURATION);
-            anim.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    onViewHidden(event);
-                }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                ViewCompat.animate(mView)
+                        .translationY(mView.getHeight())
+                        .setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR)
+                        .setDuration(ANIMATION_DURATION)
+                        .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationStart(View view) {
+                                mContentViewCallback.animateContentOut(0, ANIMATION_FADE_DURATION);
+                            }
 
-                @Override
-                public void onAnimationStart(Animation animation) {}
+                            @Override
+                            public void onAnimationEnd(View view) {
+                                onViewHidden(event);
+                            }
+                        }).start();
+            } else {
+                Animation anim = AnimationUtils.loadAnimation(mView.getContext(),
+                        R.anim.design_snackbar_out);
+                anim.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
+                anim.setDuration(ANIMATION_DURATION);
+                anim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        onViewHidden(event);
+                    }
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {}
-            });
-            mView.startAnimation(anim);
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
+                mView.startAnimation(anim);
+            }
         }
+
     }
 
     final void hideView(@BaseCallback.DismissEvent final int event) {

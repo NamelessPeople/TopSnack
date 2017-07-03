@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.support.annotation.ColorInt;
+import android.support.annotation.IdRes;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
@@ -13,14 +15,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import static android.support.annotation.RestrictTo.Scope.LIBRARY_GROUP;
 
@@ -92,8 +98,15 @@ public final class TopSnackbar extends BaseTransientBottomBar<TopSnackbar> {
         }
     }
 
+    private static boolean isTop = true;
+
     @Nullable
     private BaseCallback<TopSnackbar> mCallback;
+
+    @Override
+    public boolean isTop() {
+        return isTop;
+    }
 
     private TopSnackbar(ViewGroup parent, View content, ContentViewCallback contentViewCallback) {
         super(parent, content, contentViewCallback);
@@ -118,7 +131,7 @@ public final class TopSnackbar extends BaseTransientBottomBar<TopSnackbar> {
      */
     @NonNull
     public static TopSnackbar make(@NonNull View view, @NonNull CharSequence text,
-                                @Duration int duration) {
+                                   @Duration int duration) {
         final ViewGroup parent = findSuitableParent(view);
         if (parent == null) {
             throw new IllegalArgumentException("No suitable parent found from the given view. "
@@ -131,6 +144,31 @@ public final class TopSnackbar extends BaseTransientBottomBar<TopSnackbar> {
                         R.layout.snack, parent, false);
         final TopSnackbar snackbar = new TopSnackbar(parent, content, content);
         snackbar.setText(text);
+        snackbar.setDuration(duration);
+        return snackbar;
+    }
+
+    @NonNull
+    public static TopSnackbar make(@NonNull View view, @LayoutRes int id, @Duration int duration, boolean b) {
+        final ViewGroup parent = findSuitableParent(view);
+        if (parent == null) {
+            throw new IllegalArgumentException("No suitable parent found from the given view. "
+                    + "Please provide a valid view.");
+        }
+
+        final LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        TopSnackbarContentLayout content = (TopSnackbarContentLayout) inflater.inflate(id, parent, false);
+        final TopSnackbar snackbar = new TopSnackbar(parent, content, content);
+
+        isTop = b;
+        if(!isTop){
+            final View v=snackbar.getView();
+            ViewGroup.LayoutParams vl = v.getLayoutParams();
+            FrameLayout.LayoutParams cl = new FrameLayout.LayoutParams(vl.width,vl.height);
+            cl.gravity = Gravity.BOTTOM;
+            v.setLayoutParams(cl);
+        }
+
         snackbar.setDuration(duration);
         return snackbar;
     }
@@ -248,6 +286,53 @@ public final class TopSnackbar extends BaseTransientBottomBar<TopSnackbar> {
         return this;
     }
 
+    @NonNull
+    public TopSnackbar setLayoutAction(@IdRes int id, final View.OnClickListener listener) {
+        final TopSnackbarContentLayout contentLayout = (TopSnackbarContentLayout) mView.getChildAt(0);
+        View view = contentLayout.findViewById(id);
+        if (listener == null) {
+            view.setOnClickListener(null);
+        } else {
+            view.setVisibility(View.VISIBLE);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onClick(view);
+                    // Now dismiss the Snackbar
+                    dispatchDismiss(BaseCallback.DISMISS_EVENT_ACTION);
+                }
+            });
+        }
+        return this;
+    }
+
+//    @NonNull
+//    public TopSnackbar setLayoutImageAction(@IdRes int id, final View.OnClickListener listener, LoadingImage loadingImage) {
+//        final TopSnackbarContentLayout contentLayout = (TopSnackbarContentLayout) mView.getChildAt(0);
+//        ImageView view = (ImageView) contentLayout.findViewById(id);
+//
+//        if(loadingImage != null){
+//            loadingImage.load(view);
+//        }
+//
+//        if (listener == null) {
+//            view.setOnClickListener(null);
+//        } else {
+//            view.setVisibility(View.VISIBLE);
+//            view.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    listener.onClick(view);
+//                    // Now dismiss the Snackbar
+//                    dispatchDismiss(BaseCallback.DISMISS_EVENT_ACTION);
+//                }
+//            });
+//        }
+//        return this;
+//    }
+//    public interface LoadingImage{
+//        void load(ImageView imageView);
+//    }
     /**
      * Sets the text color of the action specified in
      * {@link #setAction(CharSequence, View.OnClickListener)}.
@@ -334,6 +419,7 @@ public final class TopSnackbar extends BaseTransientBottomBar<TopSnackbar> {
             }
         }
     }
+
     public static class SnackbarContentLayout extends LinearLayout implements
             BaseTransientBottomBar.ContentViewCallback {
         private TextView mMessageView;
@@ -454,6 +540,86 @@ public final class TopSnackbar extends BaseTransientBottomBar<TopSnackbar> {
                 ViewCompat.animate(mActionView).alpha(0f).setDuration(duration)
                         .setStartDelay(delay).start();
             }
+        }
+    }
+
+    public static class TopSnackbarContentLayout extends LinearLayout implements
+            BaseTransientBottomBar.ContentViewCallback {
+
+
+        private int mMaxWidth;
+        private int mMaxInlineActionWidth;
+
+        public TopSnackbarContentLayout(Context context) {
+            this(context, null);
+        }
+
+        public TopSnackbarContentLayout(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TopSnackbarContentLayout);
+            mMaxWidth = a.getDimensionPixelSize(R.styleable.TopSnackbarContentLayout_maxWidth, -1);
+            mMaxInlineActionWidth = a.getDimensionPixelSize(R.styleable.TopSnackbarContentLayout_maxActionInlineWidth, -1);
+            a.recycle();
+        }
+
+        @Override
+        protected void onFinishInflate() {
+            super.onFinishInflate();
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+            if (mMaxWidth > 0 && getMeasuredWidth() > mMaxWidth) {
+                widthMeasureSpec = MeasureSpec.makeMeasureSpec(mMaxWidth, MeasureSpec.EXACTLY);
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            }
+
+            final int multiLineVPadding = getResources().getDimensionPixelSize(
+                    R.dimen.design_snackbar_padding_vertical_2lines);
+            final int singleLineVPadding = getResources().getDimensionPixelSize(
+                    R.dimen.design_snackbar_padding_vertical);
+//            final boolean isMultiLine = mMessageView.getLayout().getLineCount() > 1;
+
+            boolean remeasure = false;
+            if (mMaxInlineActionWidth > 0
+                    /*&& mActionView.getMeasuredWidth() > mMaxInlineActionWidth*/) {
+                if (updateViewsWithinLayout(VERTICAL, multiLineVPadding,
+                        multiLineVPadding - singleLineVPadding)) {
+                    remeasure = true;
+                }
+            } else {
+                final int messagePadding = multiLineVPadding;
+                if (updateViewsWithinLayout(HORIZONTAL, messagePadding, messagePadding)) {
+                    remeasure = true;
+                }
+            }
+
+            if (remeasure) {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            }
+        }
+
+        private boolean updateViewsWithinLayout(final int orientation,
+                                                final int messagePadTop, final int messagePadBottom) {
+            boolean changed = false;
+            if (orientation != getOrientation()) {
+                setOrientation(orientation);
+                changed = true;
+            }
+            return changed;
+        }
+
+
+        @Override
+        public void animateContentIn(int delay, int duration) {
+
+        }
+
+        @Override
+        public void animateContentOut(int delay, int duration) {
+
         }
     }
 }

@@ -3,6 +3,5 @@
     class="com.example.topsnackbar.TopSnackbar$SnackbarLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="top"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    style="@style/Widget.Design.Snackbar" />
+    style="@style/TopSnackbar" />
