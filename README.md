@@ -3,7 +3,7 @@ TopSnack
 ==============================================================
 #example
 
-![image](https://github.com/NamelessPeople/TopSnack/blob/master/Screenshots/jie_tu_20170703_155317.jpg)
+![image](https://github.com/NamelessPeople/TopSnack/blob/master/Screenshots/jie_tu_20170703_155317.png)
 	
 #自定义布局
 
