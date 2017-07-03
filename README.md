@@ -40,7 +40,7 @@ TopSnack
 			
 	TopSnackbar.make(v,"Hello",TopSnackbar.LENGTH_SHORT).show();
 	
-#Specify TopSnack as a dependency in your build.gradle file:
+[![](https://jitpack.io/v/NamelessPeople/TopSnack.svg)](https://jitpack.io/#NamelessPeople/TopSnack)
 
 	allprojects {
 		repositories {
@@ -52,6 +52,7 @@ TopSnack
 	dependencies {
 	        compile 'com.github.NamelessPeople:TopSnack:1.0'
 	}
+
 
 
 
