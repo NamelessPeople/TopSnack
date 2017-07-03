@@ -2,8 +2,7 @@
 TopSnack
 ==============================================================
 #example
-
-![image](http://github.com/NamelessPeople/TopSnack/app/src/main/res/mipmap-hdpi/jie_tu_20170703_155317.jpg)
+![image](http://github.com/NamelessPeople/TopSnack/Screenshots/jie_tu_20170703_155317.jpg)
 	
 #自定义布局
 
