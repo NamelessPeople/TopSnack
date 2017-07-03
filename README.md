@@ -3,9 +3,7 @@ TopSnack
 ==============================================================
 #example
 
-
-	TopSnackbar.make(v,"Hello",TopSnackbar.LENGTH_SHORT).show();
-	
+![image](http://github.com/NamelessPeople/TopSnack/app/src/main/res/mipmap-hdpi/jie_tu_20170703_155317.jpg)
 	
 #自定义布局
 
@@ -39,6 +37,9 @@ TopSnack
                                 Toast.makeText(MainActivity.this, "这是一张图片", Toast.LENGTH_SHORT).show();
                             }
                         }).show();
+			
+	TopSnackbar.make(v,"Hello",TopSnackbar.LENGTH_SHORT).show();
+	
 #Specify TopSnack as a dependency in your build.gradle file:
 
 	allprojects {
