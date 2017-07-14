@@ -312,7 +312,13 @@ public final class TopSnackbar extends BaseTransientBottomBar<TopSnackbar> {
         view.setText(text);
         return this;
     }
-
+    @NonNull
+    public TopSnackbar setLayoutImageRes(@IdRes int id, int ResId) {
+        final TopSnackbarContentLayout contentLayout = (TopSnackbarContentLayout) mView.getChildAt(0);
+        ImageView view = (ImageView) contentLayout.findViewById(id);
+        view.setImageResource(ResId);
+        return this;
+    }
     public interface LoadingImage {
         void load(ImageView imageView);
     }
