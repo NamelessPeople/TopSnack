@@ -160,10 +160,10 @@ public final class TopSnackbar extends BaseTransientBottomBar<TopSnackbar> {
         final TopSnackbar snackbar = new TopSnackbar(parent, content, content);
 
         isTop = b;
-        if(!isTop){
-            final View v=snackbar.getView();
+        if (!isTop) {
+            final View v = snackbar.getView();
             ViewGroup.LayoutParams vl = v.getLayoutParams();
-            FrameLayout.LayoutParams cl = new FrameLayout.LayoutParams(vl.width,vl.height);
+            FrameLayout.LayoutParams cl = new FrameLayout.LayoutParams(vl.width, vl.height);
             cl.gravity = Gravity.BOTTOM;
             v.setLayoutParams(cl);
         }
@@ -305,6 +305,17 @@ public final class TopSnackbar extends BaseTransientBottomBar<TopSnackbar> {
         return this;
     }
 
+    @NonNull
+    public TopSnackbar setLayoutText(@IdRes int id, CharSequence text) {
+        final TopSnackbarContentLayout contentLayout = (TopSnackbarContentLayout) mView.getChildAt(0);
+        TextView view = (TextView) contentLayout.findViewById(id);
+        view.setText(text);
+        return this;
+    }
+
+    public interface LoadingImage {
+        void load(ImageView imageView);
+    }
 //    @NonNull
 //    public TopSnackbar setLayoutImageAction(@IdRes int id, final View.OnClickListener listener, LoadingImage loadingImage) {
 //        final TopSnackbarContentLayout contentLayout = (TopSnackbarContentLayout) mView.getChildAt(0);
@@ -332,6 +343,7 @@ public final class TopSnackbar extends BaseTransientBottomBar<TopSnackbar> {
 //    public interface LoadingImage{
 //        void load(ImageView imageView);
 //    }
+
     /**
      * Sets the text color of the action specified in
      * {@link #setAction(CharSequence, View.OnClickListener)}.
