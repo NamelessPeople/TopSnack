@@ -50,8 +50,9 @@ TopSnack
 	}
 
 	dependencies {
-	        compile 'com.github.NamelessPeople:TopSnack:1.2'
+	        compile 'com.github.NamelessPeople:TopSnack:v1.1.2'
 	}
+
 
 
 
