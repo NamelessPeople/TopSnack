@@ -50,38 +50,6 @@ TopSnack
 	}
 
 	dependencies {
-	        ut, TopSnackbar.LENGTH_INDEFINITE, true)
-                        .setLayoutAction(R.id.demo_text, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(MainActivity.this, "花间提壶方大厨", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setLayoutAction(R.id.demo_text2, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(MainActivity.this, "皇家特工楚乔传", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setLayoutAction(R.id.image, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(MainActivity.this, "这是一张图片", Toast.LENGTH_SHORT).show();
-                            }
-                        }).show();
-			
-	TopSnackbar.make(v,"Hello",TopSnackbar.LENGTH_SHORT).show();
-	
-[![](https://jitpack.io/v/NamelessPeople/TopSnack.svg)](https://jitpack.io/#NamelessPeople/TopSnack)
-
-	allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
-
-	dependencies {
 	        compile 'com.github.NamelessPeople:TopSnack:v1.1.2'
 	}
 
