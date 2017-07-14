@@ -11,6 +11,7 @@ android {
         targetSdkVersion 25
         versionCode 4
         versionName "1.2.1"
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
