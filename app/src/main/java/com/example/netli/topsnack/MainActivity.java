@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             public void onClick(View v) {
                                 Toast.makeText(MainActivity.this, "这是一张图片", Toast.LENGTH_SHORT).show();
                             }
-                        }).show();
+                        }).setLayoutText(R.id.demo_text2,"修改这信息").show();
 
                 break;
         }
