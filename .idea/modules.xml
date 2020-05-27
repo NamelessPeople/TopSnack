@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TopSnack.iml" filepath="$PROJECT_DIR$/TopSnack.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/TopSnack-app.iml" filepath="$PROJECT_DIR$/app/TopSnack-app.iml" group="TopSnack/app" />
+      <module fileurl="file://$PROJECT_DIR$/topsnackbar/TopSnack-topsnackbar.iml" filepath="$PROJECT_DIR$/topsnackbar/TopSnack-topsnackbar.iml" group="TopSnack/topsnackbar" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo-TopSnack.iml" filepath="$PROJECT_DIR$/demo-TopSnack.iml" group="TopSnack" />
       <module fileurl="file://$PROJECT_DIR$/topsnackbar/topsnackbar.iml" filepath="$PROJECT_DIR$/topsnackbar/topsnackbar.iml" />
     </modules>
   </component>

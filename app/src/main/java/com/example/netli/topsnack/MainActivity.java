@@ -1,13 +1,17 @@
 package com.example.netli.topsnack;
 
-import android.support.v7.app.AppCompatActivity;
+
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.topsnackbar.TopSnackbar;
+
+import static com.example.topsnackbar.BaseTransientBottomBar.LENGTH_INDEFINITE;
+
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -22,9 +26,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.text:
-                TopSnackbar.make(v, R.layout.demo_layout, TopSnackbar.LENGTH_SHORT, true)
+                TopSnackbar.make(v, R.layout.demo_layout,LENGTH_INDEFINITE, false)
                         .setLayoutText(R.id.demo_text2,"修改这信息")
                         .show();
+//
 
                 break;
         }

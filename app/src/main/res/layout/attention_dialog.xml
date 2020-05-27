@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/shape_white_corner_19"
+    android:layout_marginBottom="10dp"
+    android:layout_marginStart="14dp"
+
+    >
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/au_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/image"
+        android:layout_marginTop="17dp"
+        android:textColor="#ff333333"
+        android:textStyle="bold"
+        android:textSize="17sp"
+        android:text="果果汤" />
+    <TextView
+        android:layout_width="108dp"
+        android:layout_height="19dp"
+        android:text="喜欢就点点关注吧"
+        android:layout_below="@id/au_name"
+        android:layout_alignStart="@id/au_name"
+        android:layout_marginTop="3dp"
+        android:textColor="#ff999999"
+        android:textSize="13sp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_red_4"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp"
+        android:text="关注"
+        tools:text="关注"/>
+</RelativeLayout>
